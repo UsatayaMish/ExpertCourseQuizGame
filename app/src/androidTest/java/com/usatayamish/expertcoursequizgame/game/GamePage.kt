@@ -14,33 +14,35 @@ class GamePage(
 ) {
 
     private val containerIdMatcher: Matcher<View> = withParent(withId(R.id.rootLayout))
-    private val classTypeMatcher: Matcher<View> = withParent(isAssignableFrom(LinearLayout::class.java))
+    private val containerClassTypeMatcher: Matcher<View> = withParent(isAssignableFrom(LinearLayout::class.java))
 
     private val questionUi = QuestionUi(
         text = question,
         containerIdMatcher = containerIdMatcher,
-        containerClassTypeMatcher = classTypeMatcher
+        containerClassTypeMatcher = containerClassTypeMatcher
     )
 
     private val choicesUiList = choices.map {
         ChoiceUi(
             text = it,
             containerIdMatcher = containerIdMatcher,
-            containerClassTypeMatcher = classTypeMatcher
+            containerClassTypeMatcher = containerClassTypeMatcher
         )
     }
 
     private val checkUi = ButtonUi(
+        id = R.id.checkButton,
         textResId = R.string.check,
         colorHex = "#BC25E1",
         containerIdMatcher = containerIdMatcher,
-        containerClassTypeMatcher = classTypeMatcher
+        containerClassTypeMatcher = containerClassTypeMatcher
     )
     private val nextUi = ButtonUi(
+        id = R.id.nextButton,
         textResId = R.string.next,
         colorHex = "#52CCF8",
         containerIdMatcher = containerIdMatcher,
-        containerClassTypeMatcher = classTypeMatcher
+        containerClassTypeMatcher = containerClassTypeMatcher
     )
 
     fun assertAskedQuestionState() {
