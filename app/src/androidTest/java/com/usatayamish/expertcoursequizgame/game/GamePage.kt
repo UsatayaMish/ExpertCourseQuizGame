@@ -22,9 +22,17 @@ class GamePage(
         containerClassTypeMatcher = containerClassTypeMatcher
     )
 
-    private val choicesUiList = choices.map {
+    private val choicesUiIdList = listOf(
+        R.id.firstChoiceButton,
+        R.id.secondChoiceButton,
+        R.id.thirdChoiceButton,
+        R.id.fourthChoiceButton,
+    )
+
+    private val choicesUiList = choices.mapIndexed { index, text ->
         ChoiceUi(
-            text = it,
+            choicesUiIdList[index],
+            text = text,
             containerIdMatcher = containerIdMatcher,
             containerClassTypeMatcher = containerClassTypeMatcher
         )
@@ -92,7 +100,7 @@ class GamePage(
             if(index == 1) {
                 choiceUi.assertNotAvailableToChooseState()
             } else {
-                choiceUi.assertAvailableToChoose()
+                choiceUi.assertAvailableToChooseState()
             }
         }
         checkUi.assertVisible()
@@ -106,7 +114,7 @@ class GamePage(
         choicesUiList[2].assertNotAvailableToChooseState()
         choicesUiList[3].assertNotAvailableToChooseState()
         checkUi.assertNotVisible()
-        nextUi.asserVisible()
+        nextUi.assertVisible()
     }
 
     fun clickNext() {
