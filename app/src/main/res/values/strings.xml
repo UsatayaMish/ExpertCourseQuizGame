@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ExpertCourseQuizGame</string>
+    <string name="check">text</string>
+    <string name="next">text</string>
 </resources>
