@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewModel = GameViewModel()
+        val viewModel: GameViewModel = GameViewModel()
 
         binding.firstChoiceButton.setOnClickListener {
             val uiState: GameUiState = viewModel.chooseFirst()
