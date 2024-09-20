@@ -164,7 +164,7 @@ private class FakeRepository : GameRepository {
 
     override fun check() : CorrectAndIncorrectIndexes {
         return CorrectAndIncorrectIndexes(
-            correct = questionAndChoices().correctIndex,
+            correctIndex = questionAndChoices().correctIndex,
             userChoiceIndex = this.userChoiceIndex
         )
     }
