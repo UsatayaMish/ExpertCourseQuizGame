@@ -19,7 +19,24 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewModel: GameViewModel = GameViewModel()
+        val viewModel: GameViewModel = GameViewModel(object : GameRepository {
+            override fun questionAndChoices(): QuestionAndChoices {
+                TODO("Not yet implemented")
+            }
+
+            override fun saveUserChoice(index: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun check(): CorrectAndIncorrectIndexes {
+                TODO("Not yet implemented")
+            }
+
+            override fun next() {
+                TODO("Not yet implemented")
+            }
+
+        })
 
         binding.firstChoiceButton.setOnClickListener {
             val uiState: GameUiState = viewModel.chooseFirst()
