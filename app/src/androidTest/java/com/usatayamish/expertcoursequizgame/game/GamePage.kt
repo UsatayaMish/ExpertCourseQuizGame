@@ -84,7 +84,7 @@ class GamePage(
         questionUi.assertTextVisible()
         choicesUiList.first().assertCorrectState()
         for (i in 1 until choicesUiList.size) {
-            choicesUiList[i].assertAvailableToChooseState()
+            choicesUiList[i].assertNotAvailableToChooseState()
         }
         checkUi.assertNotVisible()
         nextUi.assertVisible()

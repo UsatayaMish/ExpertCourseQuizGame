@@ -7,7 +7,6 @@ import com.usatayamish.expertcoursequizgame.game.GamePage
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 
@@ -23,7 +22,7 @@ class ScenarioTest {
     @Before
     fun setup() {
         gamePage = GamePage(
-            question = "what color is the sky",
+            question = "What color is the sky?",
             choices = listOf(
                 "blue",
                 "green",
