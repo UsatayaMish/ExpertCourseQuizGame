@@ -11,32 +11,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.rootLayout)) { v, insets ->
+
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.rootLayout) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        val viewModel: GameViewModel = GameViewModel(object : GameRepository {
-            override fun questionAndChoices(): QuestionAndChoices {
-                TODO("Not yet implemented")
-            }
-
-            override fun saveUserChoice(index: Int) {
-                TODO("Not yet implemented")
-            }
-
-            override fun check(): CorrectAndIncorrectIndexes {
-                TODO("Not yet implemented")
-            }
-
-            override fun next() {
-                TODO("Not yet implemented")
-            }
-
-        })
+        val viewModel = GameViewModel(GameRepository.Base())
 
         binding.firstChoiceButton.setOnClickListener {
             val uiState: GameUiState = viewModel.chooseFirst()
