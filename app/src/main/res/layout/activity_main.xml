@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <TextView
+    <com.usatayamish.expertcoursequizgame.views.question.QuestionTextView
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         tools:text="Example of a question here"
@@ -26,27 +26,27 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.usatayamish.expertcoursequizgame.views.choice.ChoiceButton
         android:id="@+id/firstChoiceButton"
         android:layout_marginHorizontal="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.usatayamish.expertcoursequizgame.views.choice.ChoiceButton
         android:id="@+id/secondChoiceButton"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.usatayamish.expertcoursequizgame.views.choice.ChoiceButton
         android:id="@+id/thirdChoiceButton"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.usatayamish.expertcoursequizgame.views.choice.ChoiceButton
         android:id="@+id/fourthChoiceButton"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
@@ -58,7 +58,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.usatayamish.expertcoursequizgame.views.visiblebutton.VisibilityButton
         android:id="@+id/checkButton"
         android:text="@string/check"
         android:layout_marginHorizontal="16dp"
@@ -67,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.usatayamish.expertcoursequizgame.views.visiblebutton.VisibilityButton
         android:id="@+id/nextButton"
         android:text="@string/next"
         android:layout_marginHorizontal="16dp"

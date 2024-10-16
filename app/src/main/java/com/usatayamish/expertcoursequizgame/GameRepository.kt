@@ -11,6 +11,8 @@ interface GameRepository {
     fun next()
 
     class Base(
+        private val index: IntCache,
+        private val userChoiceIndex: IntCache,
         private val list: List<QuestionAndChoices> = listOf(
             QuestionAndChoices(
                 question = "What color is the sky?",
@@ -36,31 +38,29 @@ interface GameRepository {
     ) : GameRepository{
 
 
-        private var index = 0
 
         override fun questionAndChoices() : QuestionAndChoices {
-            return list[index]
+            return list[index.read()]
         }
 
-        private var userChoiceIndex = -1
 
         override fun saveUserChoice(index: Int) {
-            userChoiceIndex = index
+            userChoiceIndex.save(index)
         }
 
         override fun check() : CorrectAndIncorrectIndexes {
             return CorrectAndIncorrectIndexes(
                 correctIndex = questionAndChoices().correctIndex,
-                userChoiceIndex = this.userChoiceIndex
+                userChoiceIndex = this.userChoiceIndex.read()
             )
         }
 
         override fun next() {
-            userChoiceIndex = -1
-            if (index + 1 == list.size)
-                index = 0
+            userChoiceIndex.save(-1)
+            if (index.read() + 1 == list.size)
+                index.save(0)
             else
-                index++
+                index.save(index.read() + 1)
         }
     }
 }
