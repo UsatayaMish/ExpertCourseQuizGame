@@ -6,9 +6,9 @@ import com.usatayamish.expertcoursequizgame.views.choice.UpdateChoiceButton
 import com.usatayamish.expertcoursequizgame.views.question.UpdateText
 import com.usatayamish.expertcoursequizgame.views.visiblebutton.UpdateVisibility
 import com.usatayamish.expertcoursequizgame.views.visiblebutton.VisibilityUiState
-import java.io.Serializable
 
-interface GameUiState : Serializable {
+
+interface GameUiState {
 
     fun update(
         questionTextView: UpdateText,
