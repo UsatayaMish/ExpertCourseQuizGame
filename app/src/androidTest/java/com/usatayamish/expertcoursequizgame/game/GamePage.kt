@@ -121,4 +121,8 @@ class GamePage(
         nextUi.click()
     }
 
+    fun assertNotVisible() {
+        questionUi.assertDoesNotExist()
+    }
+
 }
