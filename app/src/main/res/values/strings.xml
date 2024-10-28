@@ -2,4 +2,6 @@
     <string name="app_name">ExpertCourseQuizGame</string>
     <string name="check">Check</string>
     <string name="next">Next</string>
+    <string name="new_game">Start a new game</string>
+    <string name="stats">Game Over\n\nCorrects: %d\nIncorrects: %d</string>
 </resources>
