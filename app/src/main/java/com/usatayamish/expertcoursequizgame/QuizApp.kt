@@ -7,7 +7,8 @@ import android.content.Context
 class QuizApp : Application() {
 
 
-    lateinit var viewmodel: GameViewModel
+    lateinit var gameViewModel: GameViewModel
+    lateinit var gameOverViewModel: GameOverViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -15,11 +16,13 @@ class QuizApp : Application() {
             "quizAppData",
             Context.MODE_PRIVATE
         )
-        viewmodel = GameViewModel(GameRepository.Base(
+        gameViewModel = GameViewModel(GameRepository.Base(
             IntCache.Base(sharedPreferences, "indexKey", 0),
             IntCache.Base(sharedPreferences, "userChoiceIndexKey", -1)
         ))
-
+        gameOverViewModel = GameOverViewModel() //todo
     }
 }
+
+
 
