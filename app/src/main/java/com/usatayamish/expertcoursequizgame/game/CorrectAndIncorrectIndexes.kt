@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.game
 
 data class CorrectAndIncorrectIndexes(
     val correctIndex: Int,

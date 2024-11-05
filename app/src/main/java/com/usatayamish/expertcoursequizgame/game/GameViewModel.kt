@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.game
 
 import com.usatayamish.expertcoursequizgame.views.choice.ChoiceUiState
 
@@ -7,7 +7,7 @@ class GameViewModel(
 ) {
 
     fun init(firstRun: Boolean = true): GameUiState {
-            if (firstRun) {
+        if (firstRun) {
             val data = repository.questionAndChoices()
             return GameUiState.AskedQuestion(
                 data.question,
@@ -22,8 +22,8 @@ class GameViewModel(
         repository.saveUserChoice(0)
         val data = repository.questionAndChoices()
         return GameUiState.ChoiceMade(
-            data.choices.mapIndexed{ index, _ ->
-                if(index == 0)
+            data.choices.mapIndexed { index, _ ->
+                if (index == 0)
                     ChoiceUiState.NotAvailableToChoose
                 else
                     ChoiceUiState.AvailableToChoose
@@ -35,8 +35,8 @@ class GameViewModel(
         repository.saveUserChoice(1)
         val data = repository.questionAndChoices()
         return GameUiState.ChoiceMade(
-            data.choices.mapIndexed{ index, _ ->
-                if(index == 1)
+            data.choices.mapIndexed { index, _ ->
+                if (index == 1)
                     ChoiceUiState.NotAvailableToChoose
                 else
                     ChoiceUiState.AvailableToChoose
@@ -48,8 +48,8 @@ class GameViewModel(
         repository.saveUserChoice(2)
         val data = repository.questionAndChoices()
         return GameUiState.ChoiceMade(
-            data.choices.mapIndexed{ index, _ ->
-                if(index == 2)
+            data.choices.mapIndexed { index, _ ->
+                if (index == 2)
                     ChoiceUiState.NotAvailableToChoose
                 else
                     ChoiceUiState.AvailableToChoose
@@ -61,8 +61,8 @@ class GameViewModel(
         repository.saveUserChoice(3)
         val data = repository.questionAndChoices()
         return GameUiState.ChoiceMade(
-            data.choices.mapIndexed{ index, _ ->
-                if(index == 3)
+            data.choices.mapIndexed { index, _ ->
+                if (index == 3)
                     ChoiceUiState.NotAvailableToChoose
                 else
                     ChoiceUiState.AvailableToChoose
@@ -88,7 +88,10 @@ class GameViewModel(
 
     fun next(): GameUiState {
         repository.next()
-        return init()
+        return if (repository.isLastQuestion())
+            GameUiState.Finish
+        else
+            init()
     }
 
 }

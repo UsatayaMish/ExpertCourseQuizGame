@@ -42,7 +42,7 @@ class StatsTextView : androidx.appcompat.widget.AppCompatTextView, UpdateStats {
 interface StatsUiState: Serializable{
     fun update(statsTextView: UpdateStats)
 
-    class Base(
+    data class Base(
         private val corrects: Int,
         private val incorrects: Int
     ): StatsUiState {
