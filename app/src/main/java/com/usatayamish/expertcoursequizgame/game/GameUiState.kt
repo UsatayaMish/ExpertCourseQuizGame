@@ -1,6 +1,7 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.game
 
 
+import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
 import com.usatayamish.expertcoursequizgame.views.choice.ChoiceUiState
 import com.usatayamish.expertcoursequizgame.views.choice.UpdateChoiceButton
 import com.usatayamish.expertcoursequizgame.views.question.UpdateText
@@ -18,21 +19,17 @@ interface GameUiState {
         fourthChoiceButton: UpdateChoiceButton,
         nextButton: UpdateVisibility,
         checkButton: UpdateVisibility
-    )
+    ) = Unit
 
-    object Empty : GameUiState {
+    fun navigate(navigate: NavigateToGameOver) = Unit
 
-        override fun update(
-            questionTextView: UpdateText,
-            firstChoiceButton: UpdateChoiceButton,
-            secondChoiceButton: UpdateChoiceButton,
-            thirdChoiceButton: UpdateChoiceButton,
-            fourthChoiceButton: UpdateChoiceButton,
-            nextButton: UpdateVisibility,
-            checkButton: UpdateVisibility
-        ) = Unit
+    object Empty : GameUiState
+
+    object Finish : GameUiState {
+        override fun navigate(navigate: NavigateToGameOver) {
+            navigate.navigateToGameOver()
+        }
     }
-
 
 
     data class AskedQuestion(
@@ -64,7 +61,7 @@ interface GameUiState {
 
     data class ChoiceMade(
         private val choices: List<ChoiceUiState>
-    ) : GameUiState{
+    ) : GameUiState {
 
         override fun update(
             questionTextView: UpdateText,

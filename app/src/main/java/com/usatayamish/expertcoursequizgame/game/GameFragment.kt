@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.usatayamish.expertcoursequizgame.GameUiState
 import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
 import com.usatayamish.expertcoursequizgame.QuizApp
 import com.usatayamish.expertcoursequizgame.databinding.FragmentGameBinding
@@ -41,6 +40,7 @@ class GameFragment : Fragment() {
                 binding.nextButton,
                 binding.checkButton
             )
+            uiState.navigate(requireActivity() as NavigateToGameOver)
         }
 
         binding.firstChoiceButton.setOnClickListener {
@@ -70,7 +70,8 @@ class GameFragment : Fragment() {
 
 
         binding.nextButton.setOnClickListener {
-            (requireActivity() as NavigateToGameOver).navigateToGameOver()
+            uiState = viewModel.next()
+            update.invoke()
         }
 
         uiState = viewModel.init(savedInstanceState == null)

@@ -1,4 +1,6 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.game
+
+import com.usatayamish.expertcoursequizgame.IntCache
 
 interface GameRepository {
 
@@ -9,6 +11,8 @@ interface GameRepository {
     fun check(): CorrectAndIncorrectIndexes
 
     fun next()
+
+    fun isLastQuestion(): Boolean
 
     class Base(
         private val index: IntCache,
@@ -35,11 +39,10 @@ interface GameRepository {
                 correctIndex = 0
             )
         )
-    ) : GameRepository{
+    ) : GameRepository {
 
 
-
-        override fun questionAndChoices() : QuestionAndChoices {
+        override fun questionAndChoices(): QuestionAndChoices {
             return list[index.read()]
         }
 
@@ -48,7 +51,7 @@ interface GameRepository {
             userChoiceIndex.save(index)
         }
 
-        override fun check() : CorrectAndIncorrectIndexes {
+        override fun check(): CorrectAndIncorrectIndexes {
             return CorrectAndIncorrectIndexes(
                 correctIndex = questionAndChoices().correctIndex,
                 userChoiceIndex = this.userChoiceIndex.read()
@@ -57,10 +60,12 @@ interface GameRepository {
 
         override fun next() {
             userChoiceIndex.save(-1)
-            if (index.read() + 1 == list.size)
-                index.save(0)
-            else
+            if (!isLastQuestion())
                 index.save(index.read() + 1)
+        }
+
+        override fun isLastQuestion(): Boolean {
+            return index.read() + 1 == list.size
         }
     }
 }
