@@ -10,10 +10,12 @@ import org.junit.Before
 class GameViewModelTest {
 
     private lateinit var viewModel : GameViewModel
+    private lateinit var repository: FakeRepository
 
     @Before
     fun setup() {
-        viewModel = GameViewModel(repository = FakeRepository())
+        repository = FakeRepository()
+        viewModel = GameViewModel(repository = repository)
     }
 
     /**
@@ -56,6 +58,7 @@ class GameViewModelTest {
             choices = listOf("cd1", "cd2", "cd3", "cd4")
         )
         assertEquals(expected, actual)
+        assertEquals(false, repository.clearCalled)
 
         actual = viewModel.chooseFirst()
         expected = GameUiState.ChoiceMade(
@@ -82,6 +85,7 @@ class GameViewModelTest {
         actual = viewModel.next()
         expected = GameUiState.Finish
         assertEquals(expected, actual)
+        assertEquals(true, repository.clearCalled)
     }
 
     /**
@@ -203,5 +207,10 @@ private class FakeRepository : GameRepository {
 
     override fun isLastQuestion() : Boolean {
         return index == list.size
+    }
+
+    var clearCalled = false
+    override fun clear() {
+        clearCalled = true
     }
 }

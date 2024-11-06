@@ -14,7 +14,11 @@ interface GameRepository {
 
     fun isLastQuestion(): Boolean
 
+    fun clear()
+
     class Base(
+        private val corrects: IntCache,
+        private val incorrects: IntCache,
         private val index: IntCache,
         private val userChoiceIndex: IntCache,
         private val list: List<QuestionAndChoices> = listOf(
@@ -52,20 +56,32 @@ interface GameRepository {
         }
 
         override fun check(): CorrectAndIncorrectIndexes {
+            val correctIndex = questionAndChoices().correctIndex
+
+            if(userChoiceIndex.read() == correctIndex) {
+                corrects.save(corrects.read() + 1)
+            } else {
+                incorrects.save(incorrects.read() + 1)
+            }
+
             return CorrectAndIncorrectIndexes(
-                correctIndex = questionAndChoices().correctIndex,
+                correctIndex = correctIndex,
                 userChoiceIndex = this.userChoiceIndex.read()
             )
         }
 
         override fun next() {
             userChoiceIndex.save(-1)
-            if (!isLastQuestion())
-                index.save(index.read() + 1)
+            index.save(index.read() + 1)
         }
 
         override fun isLastQuestion(): Boolean {
-            return index.read() + 1 == list.size
+            return index.read() == list.size
+        }
+
+        override fun clear() {
+            userChoiceIndex.save(-1)
+            index.save(0)
         }
     }
 }

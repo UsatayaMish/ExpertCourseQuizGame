@@ -5,6 +5,7 @@ import android.content.Context
 import com.usatayamish.expertcoursequizgame.game.GameRepository
 import com.usatayamish.expertcoursequizgame.game.GameViewModel
 import com.usatayamish.expertcoursequizgame.stats.GameOverViewModel
+import com.usatayamish.expertcoursequizgame.stats.StatsRepository
 
 
 class QuizApp : Application() {
@@ -19,12 +20,19 @@ class QuizApp : Application() {
             "quizAppData",
             Context.MODE_PRIVATE
         )
+        val corrects = IntCache.Base(sharedPreferences, "corrects", 0)
+        val incorrects = IntCache.Base(sharedPreferences, "incorrects", 0)
         gameViewModel = GameViewModel(
             GameRepository.Base(
-            IntCache.Base(sharedPreferences, "indexKey", 0),
-            IntCache.Base(sharedPreferences, "userChoiceIndexKey", -1)
+                corrects,
+                incorrects,
+                IntCache.Base(sharedPreferences, "indexKey", 0),
+                IntCache.Base(sharedPreferences, "userChoiceIndexKey", -1)
         ))
-        //gameOverViewModel = GameOverViewModel()
+        gameOverViewModel = GameOverViewModel(StatsRepository.Base(
+            corrects,
+            incorrects
+        ))
     }
 }
 
