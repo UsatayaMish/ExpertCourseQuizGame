@@ -46,10 +46,14 @@ interface StatsUiState: Serializable{
         private val corrects: Int,
         private val incorrects: Int
     ): StatsUiState {
-
         override fun update(statsTextView: UpdateStats) {
             statsTextView.update(corrects, incorrects)
         }
+
+    }
+
+    object Empty : StatsUiState {
+        override fun update(statsTextView: UpdateStats) = Unit
 
     }
 }

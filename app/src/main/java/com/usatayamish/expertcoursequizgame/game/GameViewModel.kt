@@ -88,9 +88,10 @@ class GameViewModel(
 
     fun next(): GameUiState {
         repository.next()
-        return if (repository.isLastQuestion())
+        return if (repository.isLastQuestion()) {
+            repository.clear()
             GameUiState.Finish
-        else
+        } else
             init()
     }
 
