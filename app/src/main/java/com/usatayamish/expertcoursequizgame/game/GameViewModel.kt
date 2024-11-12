@@ -1,10 +1,13 @@
 package com.usatayamish.expertcoursequizgame.game
 
+import com.usatayamish.expertcoursequizgame.ClearViewModel
+import com.usatayamish.expertcoursequizgame.MyViewModel
 import com.usatayamish.expertcoursequizgame.views.choice.ChoiceUiState
 
 class GameViewModel(
+    private val clearViewModel: ClearViewModel,
     private val repository: GameRepository
-) {
+) : MyViewModel {
 
     fun init(firstRun: Boolean = true): GameUiState {
         if (firstRun) {
@@ -90,6 +93,7 @@ class GameViewModel(
         repository.next()
         return if (repository.isLastQuestion()) {
             repository.clear()
+            clearViewModel.clear(GameViewModel::class.java)
             GameUiState.Finish
         } else
             init()

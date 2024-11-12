@@ -9,7 +9,7 @@ import com.usatayamish.expertcoursequizgame.game.NavigateToGame
 import com.usatayamish.expertcoursequizgame.stats.GameOverScreen
 import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
 
-class MainActivity : AppCompatActivity(), Navigate {
+class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
 
 
 
@@ -28,7 +28,9 @@ class MainActivity : AppCompatActivity(), Navigate {
         screen.show(R.id.container, supportFragmentManager)
     }
 
-
+    override fun <T : MyViewModel> makeViewModel(clasz: Class<T>): T {
+        return  (application as ProvideViewModel).makeViewModel(clasz)
+    }
 
 
 }
