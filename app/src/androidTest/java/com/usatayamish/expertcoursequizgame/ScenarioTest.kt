@@ -258,4 +258,29 @@ class ScenarioTest {
         gameOverPage.assertInitialState()
         //endregion
     }
+
+    /**
+     * QGTC-04
+     */
+
+    @Test
+    fun caseNumber4() {
+        val loadPage = LoadPage()
+
+        loadPage.assertErrorState()
+        activityScenarioRule.scenario.recreate()
+        loadPage.assertErrorState()
+
+        loadPage.clickRetry()
+
+        loadPage.assertProgressState()
+        activityScenarioRule.scenario.recreate()
+        loadPage.assertProgressState()
+
+        loadPage.waitTillGone()
+
+        gamePage.assertAskedQuestionState()
+        activityScenarioRule.scenario.recreate()
+        gamePage.assertAskedQuestionState()
+    }
 }
