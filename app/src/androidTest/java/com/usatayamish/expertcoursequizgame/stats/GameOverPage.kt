@@ -1,10 +1,11 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.stats
 
 import android.view.View
 import android.widget.FrameLayout
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
+import com.usatayamish.expertcoursequizgame.R
 import com.usatayamish.expertcoursequizgame.game.ButtonUi
 import org.hamcrest.Matcher
 
@@ -33,7 +34,7 @@ class GameOverPage(incorrects: Int, corrects: Int) {
         newGameUi.click()
     }
 
-    fun assertNotVisible() {
+    fun assertDoesNotExist() {
         statsUi.assertDoesNotExist()
     }
 
