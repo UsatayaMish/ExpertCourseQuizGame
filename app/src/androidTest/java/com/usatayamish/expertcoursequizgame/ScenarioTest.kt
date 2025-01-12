@@ -3,6 +3,8 @@ package com.usatayamish.expertcoursequizgame
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.usatayamish.expertcoursequizgame.game.GamePage
+import com.usatayamish.expertcoursequizgame.load.LoadPage
+import com.usatayamish.expertcoursequizgame.stats.GameOverPage
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,9 +39,7 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber1() {
-        gamePage.assertAskedQuestionState()
-        activityScenarioRule.scenario.recreate()
-        gamePage.assertAskedQuestionState()
+        caseNumber4()
 
         gamePage.clickFirstChoice()
         gamePage.assertFirstChoiceMadeState()
@@ -57,9 +57,7 @@ class ScenarioTest {
      */
     @Test
     fun caseNumber2() {
-        gamePage.assertAskedQuestionState()
-        activityScenarioRule.scenario.recreate()
-        gamePage.assertAskedQuestionState()
+        caseNumber4()
 
         gamePage.clickFirstChoice()
         gamePage.assertFirstChoiceMadeState()
@@ -99,9 +97,7 @@ class ScenarioTest {
     @Test
     fun caseNumber3() {
         //region 2 incorrect
-        gamePage.assertAskedQuestionState()
-        activityScenarioRule.scenario.recreate()
-        gamePage.assertAskedQuestionState()
+        caseNumber4()
 
         gamePage.clickSecondChoice()
         gamePage.assertSecondChoiceMadeState()
@@ -148,11 +144,12 @@ class ScenarioTest {
         gameOverPage.assertInitialState()
 
         gameOverPage.clickNewGame()
-        gameOverPage.assertNotVisible()
+        gameOverPage.assertDoesNotExist()
         //endregion
 
         //region 1 incorrect and 1 correct
         setup()
+        caseNumber4()
 
         gamePage.assertAskedQuestionState()
         activityScenarioRule.scenario.recreate()
@@ -203,11 +200,12 @@ class ScenarioTest {
         gameOverPage.assertInitialState()
 
         gameOverPage.clickNewGame()
-        gameOverPage.assertNotVisible()
+        gameOverPage.assertDoesNotExist()
         //endregion
 
         //region 2 correct
         setup()
+        caseNumber4()
 
         gamePage.assertAskedQuestionState()
         activityScenarioRule.scenario.recreate()
@@ -266,6 +264,12 @@ class ScenarioTest {
     @Test
     fun caseNumber4() {
         val loadPage = LoadPage()
+
+        loadPage.assertProgressState()
+        activityScenarioRule.scenario.recreate()
+        loadPage.assertProgressState()
+
+        loadPage.waitTillError()
 
         loadPage.assertErrorState()
         activityScenarioRule.scenario.recreate()
