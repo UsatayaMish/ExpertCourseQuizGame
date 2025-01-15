@@ -1,26 +1,29 @@
-package com.usatayamish.expertcoursequizgame.views.visiblebutton
+package com.usatayamish.expertcoursequizgame.views.progress
 
 import android.content.Context
 import android.os.Parcelable
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatButton
+import android.widget.ProgressBar
+import com.usatayamish.expertcoursequizgame.views.visiblebutton.UpdateVisibility
+import com.usatayamish.expertcoursequizgame.views.visiblebutton.VisibilitySavedState
+import com.usatayamish.expertcoursequizgame.views.visiblebutton.VisibilityUiState
 
-class VisibilityButton : AppCompatButton, UpdateVisibility {
+class LoadView : ProgressBar, UpdateVisibility {
+
+    private lateinit var state: VisibilityUiState
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private lateinit var state: VisibilityUiState
-    
     override fun onSaveInstanceState(): Parcelable? {
-            return super.onSaveInstanceState()?.let {
-                val savedState = VisibilitySavedState(it)
-                savedState.save(state)
-                return savedState
-            }
+        return super.onSaveInstanceState()?.let {
+            val savedState = VisibilitySavedState(it)
+            savedState.save(state)
+            return savedState
         }
-    
+    }
+
     override fun onRestoreInstanceState(state: Parcelable?) {
         val restoredState = state as VisibilitySavedState
         super.onRestoreInstanceState(restoredState.superState)
@@ -35,11 +38,8 @@ class VisibilityButton : AppCompatButton, UpdateVisibility {
         this.state = state
         state.update(this)
     }
+
+
 }
 
-interface UpdateVisibility{
 
-    fun update(visibility: Int)
-
-    fun update(state: VisibilityUiState)
-}

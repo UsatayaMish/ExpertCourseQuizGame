@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:id="@+id/loadContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.usatayamish.expertcoursequizgame.views.error.ErrorView
+        android:layout_width="match_parent"
+        android:id="@+id/errorTextView"
+        android:padding="8dp"
+        android:gravity="center"
+        android:text="@string/no_internet_connection"
+        android:layout_height="wrap_content"/>
+
+    <com.usatayamish.expertcoursequizgame.views.retry.RetryButton
+        android:layout_width="match_parent"
+        android:text="@string/retry"
+        android:id="@+id/retryButton"
+        android:background="@color/violet"
+        android:layout_height="wrap_content"/>
+
+    <com.usatayamish.expertcoursequizgame.views.progress.LoadView
+        android:layout_width="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
