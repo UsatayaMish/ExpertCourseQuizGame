@@ -1,5 +1,7 @@
 package com.usatayamish.expertcoursequizgame.game
 
+import com.usatayamish.expertcoursequizgame.ClearViewModel
+import com.usatayamish.expertcoursequizgame.MyViewModel
 import com.usatayamish.expertcoursequizgame.views.choice.ChoiceUiState
 import org.junit.Test
 
@@ -15,7 +17,7 @@ class GameViewModelTest {
     @Before
     fun setup() {
         repository = FakeRepository()
-        viewModel = GameViewModel(repository = repository)
+        viewModel = GameViewModel(FakeClearViewModel(), repository = repository)
     }
 
     /**
@@ -210,7 +212,15 @@ private class FakeRepository : GameRepository {
     }
 
     var clearCalled = false
+
     override fun clear() {
         clearCalled = true
+    }
+}
+
+class FakeClearViewModel : ClearViewModel {
+
+    override fun clear(viewModelClass: Class<out MyViewModel>) {
+
     }
 }
