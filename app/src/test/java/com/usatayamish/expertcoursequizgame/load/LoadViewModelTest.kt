@@ -102,13 +102,13 @@ private class FakeLoadRepository : LoadRepository {
 
     var loadCalledCount = 0
 
-    override fun load(resultCallback: (loadResult) -> Unit) {
+    override fun load(resultCallback: (LoadResult) -> Unit) {
         loadCalledCount++
         loadResultCallback = resultCallback
     }
 
     fun returnResult() {
-        loadResultCallback.invoke(loadResult)
+        loadResultCallback.invoke(loadResult!!)
     }
 }
 
@@ -123,7 +123,7 @@ private class FakeUiObservable: UiObservable {
         registerCalledCount++
         observerCached = observer
         if(uiStateCached != null) {
-            observerCached!!.invoke(uiStateCached)
+            observerCached!!.invoke(uiStateCached!!)
             uiStateCached = null
         }
     }
