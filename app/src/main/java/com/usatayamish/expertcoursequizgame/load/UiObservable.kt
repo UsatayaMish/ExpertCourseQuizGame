@@ -16,7 +16,7 @@ interface UiObservable{
         override fun register(observer: (LoadUiState) -> Unit) {
             observerCached = observer
             if(uiStateCached != null) {
-                observerCached!!.invoke(uiStateCached)
+                observerCached!!.invoke(uiStateCached!!)
                 uiStateCached = null
             }
         }
