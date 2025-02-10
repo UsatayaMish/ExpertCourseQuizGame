@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame.load
+package com.usatayamish.expertcoursequizgame.load.data
 
 import com.google.gson.Gson
 import java.net.HttpURLConnection
@@ -6,7 +6,7 @@ import java.net.URL
 
 interface LoadRepository {
 
-    fun load(resultCallback: (LoadResult) -> Unit)
+    fun load() : LoadResult
 
     class Base(
         private val parseQuestionAndChoices: ParseQuestionAndChoices,
@@ -15,7 +15,7 @@ interface LoadRepository {
 
         private val url = "https://opentdb.com/api.php?amount=10&type=multiple"
 
-        override fun load(resultCallback: (LoadResult) -> Unit) {
+        override fun load() : LoadResult {
             val connection = URL(url).openConnection() as HttpURLConnection
             try {
                 val data = connection.inputStream.bufferedReader().use { it.readText() }
@@ -24,13 +24,13 @@ interface LoadRepository {
                 if (response.response_code == 0) {
                     val list = response.results
                     if (list.isEmpty()) {
-                        resultCallback.invoke(LoadResult.Error("empty data"))
+                        return (LoadResult.Error("empty data"))
                     } else {
                         dataCache.save(data)
-                        resultCallback.invoke(LoadResult.Success)
+                        return (LoadResult.Success)
                     }
                 } else {
-                    resultCallback.invoke(
+                    return (
                         LoadResult.Error(
                             "response code is not successful ${
                                 handleResponseCode(
@@ -41,7 +41,7 @@ interface LoadRepository {
                     )
                 }
             } catch (e: Exception) {
-                resultCallback.invoke(LoadResult.Error(e.message ?: "error"))
+                return (LoadResult.Error(e.message ?: "error"))
             } finally {
                 connection.disconnect()
             }

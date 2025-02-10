@@ -1,6 +1,7 @@
 package com.usatayamish.expertcoursequizgame.load
 
 import com.google.gson.Gson
+import com.usatayamish.expertcoursequizgame.load.data.Response
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

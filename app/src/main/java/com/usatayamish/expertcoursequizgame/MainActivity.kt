@@ -6,6 +6,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.usatayamish.expertcoursequizgame.game.GameScreen
 import com.usatayamish.expertcoursequizgame.game.NavigateToGame
+import com.usatayamish.expertcoursequizgame.load.presentation.LoadScreen
+import com.usatayamish.expertcoursequizgame.load.presentation.NavigateToLoad
 import com.usatayamish.expertcoursequizgame.stats.GameOverScreen
 import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
 
@@ -18,8 +20,8 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        if(savedInstanceState == null) {
-            navigateToGame()
+        if(savedInstanceState == null) { //todo MainViewModel later
+            navigateToLoad()
         }
 
     }
@@ -35,16 +37,16 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
 
 }
 
-interface Navigate: NavigateToGame, NavigateToGameOver {
+interface Navigate: NavigateToGame, NavigateToGameOver, NavigateToLoad {
 
     fun navigate(screen: Screen)
 
-    override fun navigateToGameOver() {
-        navigate(GameOverScreen)
-    }
+    override fun navigateToGameOver() = navigate(GameOverScreen)
 
-    override fun navigateToGame() {
-        navigate(GameScreen)
-    }
+
+    override fun navigateToGame() = navigate(GameScreen)
+
+    override fun navigateToLoad() = navigate(LoadScreen)
+
 }
 

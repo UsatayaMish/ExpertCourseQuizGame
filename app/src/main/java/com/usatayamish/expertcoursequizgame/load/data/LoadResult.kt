@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame.load
+package com.usatayamish.expertcoursequizgame.load.data
 
 interface LoadResult {
 

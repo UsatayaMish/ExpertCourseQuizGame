@@ -1,8 +1,8 @@
 package com.usatayamish.expertcoursequizgame.game
 
 import com.usatayamish.expertcoursequizgame.IntCache
-import com.usatayamish.expertcoursequizgame.load.ParseQuestionAndChoices
-import com.usatayamish.expertcoursequizgame.load.StringCache
+import com.usatayamish.expertcoursequizgame.load.data.ParseQuestionAndChoices
+import com.usatayamish.expertcoursequizgame.load.data.StringCache
 
 interface GameRepository {
 

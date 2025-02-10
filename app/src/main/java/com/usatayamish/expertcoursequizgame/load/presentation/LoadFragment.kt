@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame.load
+package com.usatayamish.expertcoursequizgame.load.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import com.usatayamish.expertcoursequizgame.ProvideViewModel
 import com.usatayamish.expertcoursequizgame.databinding.FragmentLoadBinding
 import com.usatayamish.expertcoursequizgame.game.NavigateToGame
 
-class LoadFragment : Fragment(){
+class LoadFragment : Fragment() {
 
     private var _binding: FragmentLoadBinding? = null
 
@@ -26,12 +26,15 @@ class LoadFragment : Fragment(){
     }
 
     private val update: (LoadUiState) -> Unit = { uiState ->
+
+
         uiState.show(
             binding.errorTextView,
             binding.retryButton,
             binding.progressBar
         )
         uiState.navigate(requireActivity() as NavigateToGame)
+
     }
 
     private lateinit var viewModel: LoadViewModel
