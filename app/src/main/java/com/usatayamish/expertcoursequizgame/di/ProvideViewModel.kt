@@ -1,6 +1,7 @@
 package com.usatayamish.expertcoursequizgame
 
 import com.usatayamish.expertcoursequizgame.game.di.ProvideGameViewModel
+import com.usatayamish.expertcoursequizgame.load.di.ProvideLoadViewModel
 import com.usatayamish.expertcoursequizgame.stats.di.ProvideGameOverViewModel
 
 interface ProvideViewModel {
@@ -16,6 +17,7 @@ interface ProvideViewModel {
 
         init {
             chain = Error()
+            chain = ProvideLoadViewModel(core, chain)
             chain = ProvideGameViewModel(core, chain)
             chain = ProvideGameOverViewModel(core, chain)
         }

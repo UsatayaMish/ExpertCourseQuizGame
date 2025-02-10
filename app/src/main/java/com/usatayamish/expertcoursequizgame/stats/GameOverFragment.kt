@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.usatayamish.expertcoursequizgame.ProvideViewModel
-import com.usatayamish.expertcoursequizgame.game.NavigateToGame
 import com.usatayamish.expertcoursequizgame.databinding.FragmentGameOverBinding
+import com.usatayamish.expertcoursequizgame.load.presentation.NavigateToLoad
 
 
 class GameOverFragment : Fragment() {
@@ -32,7 +32,7 @@ class GameOverFragment : Fragment() {
 
         binding.newGameButton.setOnClickListener {
             viewModel.clear()
-            (requireActivity() as NavigateToGame).navigateToGame()
+            (requireActivity() as NavigateToLoad).navigateToLoad()
         }
         val uiState = viewModel.init(savedInstanceState == null)
         binding.statsTextView.update(uiState)

@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame.load
+package com.usatayamish.expertcoursequizgame.load.presentation
 
 import com.usatayamish.expertcoursequizgame.R
 import com.usatayamish.expertcoursequizgame.game.NavigateToGame
@@ -43,7 +43,7 @@ interface LoadUiState {
 
     data class Error(
         private val message: String //todo handle message String and resId same time
-    ) : Abstract (
+    ) : Abstract(
         errorUiState = ErrorUiState.Show(R.string.no_internet_connection),
         retryUiState = VisibilityUiState.Visible,
         progressUiState = VisibilityUiState.Gone
