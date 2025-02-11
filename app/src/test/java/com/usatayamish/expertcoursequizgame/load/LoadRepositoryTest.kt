@@ -1,7 +1,7 @@
 package com.usatayamish.expertcoursequizgame.load
 
 import com.google.gson.Gson
-import com.usatayamish.expertcoursequizgame.load.data.Response
+import com.usatayamish.expertcoursequizgame.load.data.QuizResponse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,8 +19,8 @@ class LoadRepositoryTest {
             assertTrue(data.isNotEmpty())
 
             val gson = Gson()
-            val response = gson.fromJson(data, Response::class.java)
-            val list = response.results
+            val response = gson.fromJson(data, QuizResponse::class.java)
+            val list = response.dataList
             assertEquals(10, list.size)
         } catch (e: Exception) {
             e.printStackTrace()
