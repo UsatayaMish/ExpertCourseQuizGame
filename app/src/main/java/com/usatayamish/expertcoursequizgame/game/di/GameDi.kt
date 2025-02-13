@@ -17,17 +17,28 @@ class GameModule(private val core: Core) : Module<GameViewModel> {
         val corrects = IntCache.Base(core.sharedPreferences, "corrects", 0)
         val incorrects = IntCache.Base(core.sharedPreferences, "incorrects", 0)
         val defaultResponse = core.gson.toJson(QuizResponse(-1, emptyList()))
+        val index = IntCache.Base(core.sharedPreferences, "indexKey", 0)
+        val userChoiceIndex = IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1)
         val dataCache = StringCache.Base(core.sharedPreferences, "responseData", defaultResponse)
         return GameViewModel(
             core.clearViewModel,
-            GameRepository.Base(
-                corrects,
-                incorrects,
-                IntCache.Base(core.sharedPreferences, "indexKey", 0),
-                IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1),
-                dataCache,
-                ParseQuestionAndChoices.Base(core.gson)
-            )
+            if (core.runUiTests)
+                GameRepository.Base(
+                    corrects,
+                    incorrects,
+                    index,
+                    userChoiceIndex,
+                )
+            else {
+                GameRepository.Base(
+                    corrects,
+                    incorrects,
+                    index,
+                    userChoiceIndex,
+                    dataCache,
+                    ParseQuestionAndChoices.Base(core.gson)
+                )
+            }
 
         )
     }
