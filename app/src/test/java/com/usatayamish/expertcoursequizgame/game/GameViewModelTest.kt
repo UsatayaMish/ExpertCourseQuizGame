@@ -220,7 +220,13 @@ private class FakeRepository : GameRepository {
 
 class FakeClearViewModel : ClearViewModel {
 
-    override fun clear(viewModelClass: Class<out MyViewModel>) {
+    private var actual: Class<out MyViewModel>? = null
 
+    override fun clear(viewModelClass: Class<out MyViewModel>) {
+        actual = viewModelClass
+    }
+
+    fun assertClearCalled(expected: Class<out MyViewModel>) {
+        assertEquals(expected, actual)
     }
 }

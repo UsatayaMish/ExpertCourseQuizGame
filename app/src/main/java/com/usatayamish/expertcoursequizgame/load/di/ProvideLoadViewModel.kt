@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class ProvideLoadViewModel(
     core: Core,
     next: ProvideViewModel
-): AbstractProvideViewModel(
+) : AbstractProvideViewModel(
     core,
     next,
     LoadViewModel::class.java
@@ -53,13 +53,17 @@ class LoadModule(
             .build()
         val service = retrofit.create(QuizService::class.java)
         return LoadViewModel(
-            LoadRepository.Base(
-                service,
-                ParseQuestionAndChoices.Base(core.gson),
-                dataCache
-            ),
+            if (core.runUiTests)
+                LoadRepository.FakeRepository()
+            else
+                LoadRepository.Base(
+                    service,
+                    ParseQuestionAndChoices.Base(core.gson),
+                    dataCache
+                ),
             UiObservable.Base(),
-            RunAsync.Base()
+            RunAsync.Base(),
+            core.clearViewModel
         )
     }
 }

@@ -24,7 +24,6 @@ class ErrorUi(
     private val interaction: ViewInteraction = onView(
             allOf(
                 withId(viewId),
-                withText(R.string.no_internet_connection),
                 isAssignableFrom(TextView::class.java),
                 containerIdMatcher,
                 containerClassTypeMatcher
@@ -38,6 +37,7 @@ class ErrorUi(
     fun assertVisible() {
         interaction
             .check(matches(isCompletelyDisplayed()))
+            .check(matches(withText(R.string.no_internet_connection)))
     }
 
     fun waitTillVisible() {
