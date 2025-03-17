@@ -1,12 +1,13 @@
 package com.usatayamish.expertcoursequizgame.stats
 
 import com.usatayamish.expertcoursequizgame.ClearViewModel
-import com.usatayamish.expertcoursequizgame.MyViewModel
+import com.usatayamish.expertcoursequizgame.core.MyViewModel
 import com.usatayamish.expertcoursequizgame.views.stats.StatsUiState
 
 class GameOverViewModel(
     private val clearViewModel: ClearViewModel,
-    private val repository: StatsRepository) : MyViewModel{
+    private val repository: StatsRepository
+) : MyViewModel<Unit> {
 
     fun init(isFirstRun: Boolean): StatsUiState {
         if (isFirstRun) {

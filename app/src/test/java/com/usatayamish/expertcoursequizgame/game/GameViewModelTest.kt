@@ -1,23 +1,33 @@
 package com.usatayamish.expertcoursequizgame.game
 
 import com.usatayamish.expertcoursequizgame.ClearViewModel
-import com.usatayamish.expertcoursequizgame.MyViewModel
+import com.usatayamish.expertcoursequizgame.core.MyViewModel
+import com.usatayamish.expertcoursequizgame.load.FakeRunAsync
+import com.usatayamish.expertcoursequizgame.load.FakeUiObservable
 import com.usatayamish.expertcoursequizgame.views.choice.ChoiceUiState
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Test
 
 
 class GameViewModelTest {
 
     private lateinit var viewModel : GameViewModel
     private lateinit var repository: FakeRepository
+    private lateinit var runAsync: FakeRunAsync
+    private lateinit var observable: FakeGameUiObservable
 
     @Before
     fun setup() {
+        runAsync = FakeRunAsync()
+        observable = FakeGameUiObservable.Base()
         repository = FakeRepository()
-        viewModel = GameViewModel(FakeClearViewModel(), repository = repository)
+        viewModel = GameViewModel(
+            uiObservable = observable,
+            clearViewModel = FakeClearViewModel(),
+            repository = repository,
+            runAsync = runAsync
+        )
     }
 
     /**
@@ -25,14 +35,18 @@ class GameViewModelTest {
      */
     @Test
     fun caseNumber1() {
-        var actual: GameUiState = viewModel.init()
+        viewModel.init()
+        runAsync.returnResult()
+        var actual: GameUiState = observable.postUiStateCalledList.last()
         var expected: GameUiState = GameUiState.AskedQuestion(
             question = "q1",
             choices = listOf("c1", "c2", "c3", "c4")
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.chooseFirst()
+        viewModel.chooseFirst()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.NotAvailableToChoose,
@@ -43,7 +57,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.check()
+        viewModel.check()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.AnswerChecked(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.Correct,
@@ -54,7 +70,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.next()
+        viewModel.next()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.AskedQuestion(
             question = "q2",
             choices = listOf("cd1", "cd2", "cd3", "cd4")
@@ -62,7 +80,9 @@ class GameViewModelTest {
         assertEquals(expected, actual)
         assertEquals(false, repository.clearCalled)
 
-        actual = viewModel.chooseFirst()
+        viewModel.chooseFirst()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.NotAvailableToChoose,
@@ -73,7 +93,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.check()
+        viewModel.check()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.AnswerChecked(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.Correct,
@@ -84,7 +106,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.next()
+        viewModel.next()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.Finish
         assertEquals(expected, actual)
         assertEquals(true, repository.clearCalled)
@@ -95,14 +119,18 @@ class GameViewModelTest {
      */
     @Test
     fun caseNumber2() {
-        var actual: GameUiState = viewModel.init()
+        viewModel.init()
+        runAsync.returnResult()
+        var actual: GameUiState = observable.postUiStateCalledList.last()
         var expected: GameUiState = GameUiState.AskedQuestion(
             question = "q1",
             choices = listOf("c1", "c2", "c3", "c4")
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.chooseFirst()
+        viewModel.chooseFirst()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.NotAvailableToChoose,
@@ -113,7 +141,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.chooseSecond()
+        viewModel.chooseSecond()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.AvailableToChoose,
@@ -124,7 +154,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.chooseThird()
+        viewModel.chooseThird()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.AvailableToChoose,
@@ -135,7 +167,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.chooseFourth()
+        viewModel.chooseFourth()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.ChoiceMade(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.AvailableToChoose,
@@ -146,7 +180,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.check()
+        viewModel.check()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.AnswerChecked(
             choices = listOf<ChoiceUiState>(
                 ChoiceUiState.Correct,
@@ -157,7 +193,9 @@ class GameViewModelTest {
         )
         assertEquals(expected, actual)
 
-        actual = viewModel.next()
+        viewModel.next()
+        runAsync.returnResult()
+        actual = observable.postUiStateCalledList.last()
         expected = GameUiState.AskedQuestion(
             question = "q2",
             choices = listOf("cd1", "cd2", "cd3", "cd4")
@@ -184,7 +222,7 @@ private class FakeRepository : GameRepository {
 
     private var index = 0
 
-    override fun questionAndChoices() : QuestionAndChoices {
+    override suspend fun questionAndChoices() : QuestionAndChoices {
         return list[index]
     }
 
@@ -194,7 +232,7 @@ private class FakeRepository : GameRepository {
         userChoiceIndex = index
     }
 
-    override fun check() : CorrectAndIncorrectIndexes {
+    override suspend fun check() : CorrectAndIncorrectIndexes {
         return CorrectAndIncorrectIndexes(
             correctIndex = questionAndChoices().correctIndex,
             userChoiceIndex = this.userChoiceIndex
@@ -213,20 +251,25 @@ private class FakeRepository : GameRepository {
 
     var clearCalled = false
 
-    override fun clear() {
+    override suspend fun clear() {
         clearCalled = true
     }
 }
 
 class FakeClearViewModel : ClearViewModel {
 
-    private var actual: Class<out MyViewModel>? = null
+    private var actual: Class<out MyViewModel<*>>? = null
 
-    override fun clear(viewModelClass: Class<out MyViewModel>) {
+    override fun clear(viewModelClass: Class<out MyViewModel<*>>) {
         actual = viewModelClass
     }
 
-    fun assertClearCalled(expected: Class<out MyViewModel>) {
+    fun assertClearCalled(expected: Class<out MyViewModel<*>>) {
         assertEquals(expected, actual)
     }
+}
+
+private interface FakeGameUiObservable: FakeUiObservable<GameUiState>, GameUiObservable {
+
+    class Base: FakeUiObservable.Abstract<GameUiState>(), FakeGameUiObservable
 }

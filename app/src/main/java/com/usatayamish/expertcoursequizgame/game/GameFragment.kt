@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.usatayamish.expertcoursequizgame.ProvideViewModel
-import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
+import com.usatayamish.expertcoursequizgame.core.AbstractFragment
 import com.usatayamish.expertcoursequizgame.databinding.FragmentGameBinding
+import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
 
 
-class GameFragment : Fragment() {
+class GameFragment : AbstractFragment<GameUiState, GameViewModel>() {
 
     private var _binding: FragmentGameBinding? = null
 
@@ -25,63 +25,54 @@ class GameFragment : Fragment() {
         return binding.root
     }
 
+    override val update: (GameUiState) -> Unit = { uiState ->
+        uiState.update(
+            binding.questionTextView,
+            binding.firstChoiceButton,
+            binding.secondChoiceButton,
+            binding.thirdChoiceButton,
+            binding.fourthChoiceButton,
+            binding.nextButton,
+            binding.checkButton
+        )
+        uiState.navigate(requireActivity() as NavigateToGameOver)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = (requireActivity() as ProvideViewModel).makeViewModel(GameViewModel::class.java)
-        lateinit var uiState: GameUiState
-        val update: ()-> Unit = {
-            uiState.update(
-                binding.questionTextView,
-                binding.firstChoiceButton,
-                binding.secondChoiceButton,
-                binding.thirdChoiceButton,
-                binding.fourthChoiceButton,
-                binding.nextButton,
-                binding.checkButton
-            )
-            uiState.navigate(requireActivity() as NavigateToGameOver)
-        }
+        viewModel = (requireActivity() as ProvideViewModel).makeViewModel(GameViewModel::class.java)
 
         binding.firstChoiceButton.setOnClickListener {
-            uiState = viewModel.chooseFirst()
-            update.invoke()
+            viewModel.chooseFirst()
         }
 
         binding.secondChoiceButton.setOnClickListener {
-            uiState = viewModel.chooseSecond()
-            update.invoke()
+            viewModel.chooseSecond()
         }
 
         binding.thirdChoiceButton.setOnClickListener {
-            uiState = viewModel.chooseThird()
-            update.invoke()
+            viewModel.chooseThird()
         }
 
         binding.fourthChoiceButton.setOnClickListener {
-            uiState = viewModel.chooseFourth()
-            update.invoke()
+            viewModel.chooseFourth()
         }
 
         binding.checkButton.setOnClickListener {
-            uiState = viewModel.check()
-            update.invoke()
+            viewModel.check()
         }
 
 
         binding.nextButton.setOnClickListener {
-            uiState = viewModel.next()
-            update.invoke()
+            viewModel.next()
         }
 
-        uiState = viewModel.init(savedInstanceState == null)
-        update.invoke()
+        viewModel.init(savedInstanceState == null)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

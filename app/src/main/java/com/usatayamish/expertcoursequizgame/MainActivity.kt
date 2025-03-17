@@ -4,6 +4,8 @@ package com.usatayamish.expertcoursequizgame
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.usatayamish.expertcoursequizgame.core.MyViewModel
+import com.usatayamish.expertcoursequizgame.core.Screen
 import com.usatayamish.expertcoursequizgame.game.GameScreen
 import com.usatayamish.expertcoursequizgame.game.NavigateToGame
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadScreen
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
         screen.show(R.id.container, supportFragmentManager)
     }
 
-    override fun <T : MyViewModel> makeViewModel(clasz: Class<T>): T {
+    override fun <S: Any, T : MyViewModel<S>> makeViewModel(clasz: Class<T>): T {
         return  (application as ProvideViewModel).makeViewModel(clasz)
     }
 

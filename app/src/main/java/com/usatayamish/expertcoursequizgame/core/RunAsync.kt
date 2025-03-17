@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.core
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -2,21 +2,16 @@ package com.usatayamish.expertcoursequizgame.load.presentation
 
 
 import com.usatayamish.expertcoursequizgame.ClearViewModel
-import com.usatayamish.expertcoursequizgame.MyViewModel
-import com.usatayamish.expertcoursequizgame.RunAsync
+import com.usatayamish.expertcoursequizgame.core.MyViewModel
+import com.usatayamish.expertcoursequizgame.core.RunAsync
 import com.usatayamish.expertcoursequizgame.load.data.LoadRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 class LoadViewModel(
     private val repository: LoadRepository,
-    private val observable: UiObservable,
+    observable: LoadUiObservable,
     private val runAsync: RunAsync,
     private val clearViewModel: ClearViewModel
-) : MyViewModel {
-
-    private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+) : MyViewModel.Abstract<LoadUiState>(observable) {
 
     fun load(isFirstRun: Boolean = true) {
         if (isFirstRun) {
@@ -35,11 +30,4 @@ class LoadViewModel(
             }
         }
     }
-
-    fun startUpdates(observer: (LoadUiState) -> Unit) = observable.register(observer)
-
-
-    fun stopUpdates() = observable.unregister()
-
-
 }

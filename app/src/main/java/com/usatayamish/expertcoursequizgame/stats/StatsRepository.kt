@@ -1,6 +1,6 @@
 package com.usatayamish.expertcoursequizgame.stats
 
-import com.usatayamish.expertcoursequizgame.IntCache
+import com.usatayamish.expertcoursequizgame.core.IntCache
 
 
 interface StatsRepository {

@@ -1,4 +1,4 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.core
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

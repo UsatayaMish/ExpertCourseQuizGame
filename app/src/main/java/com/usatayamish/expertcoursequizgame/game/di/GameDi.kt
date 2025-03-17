@@ -1,29 +1,26 @@
 package com.usatayamish.expertcoursequizgame.game.di
 
 import com.usatayamish.expertcoursequizgame.Core
-import com.usatayamish.expertcoursequizgame.IntCache
 import com.usatayamish.expertcoursequizgame.Module
 import com.usatayamish.expertcoursequizgame.ProvideViewModel
+import com.usatayamish.expertcoursequizgame.core.IntCache
 import com.usatayamish.expertcoursequizgame.di.AbstractProvideViewModel
 import com.usatayamish.expertcoursequizgame.game.GameRepository
+import com.usatayamish.expertcoursequizgame.game.GameUiObservable
 import com.usatayamish.expertcoursequizgame.game.GameViewModel
-import com.usatayamish.expertcoursequizgame.load.data.ParseQuestionAndChoices
-import com.usatayamish.expertcoursequizgame.load.data.QuizResponse
-import com.usatayamish.expertcoursequizgame.load.data.StringCache
 
 class GameModule(private val core: Core) : Module<GameViewModel> {
 
     override fun viewModel(): GameViewModel {
         val corrects = IntCache.Base(core.sharedPreferences, "corrects", 0)
         val incorrects = IntCache.Base(core.sharedPreferences, "incorrects", 0)
-        val defaultResponse = core.gson.toJson(QuizResponse(-1, emptyList()))
         val index = IntCache.Base(core.sharedPreferences, "indexKey", 0)
         val userChoiceIndex = IntCache.Base(core.sharedPreferences, "userChoiceIndexKey", -1)
-        val dataCache = StringCache.Base(core.sharedPreferences, "responseData", defaultResponse)
         return GameViewModel(
+            GameUiObservable.Base(),
             core.clearViewModel,
             if (core.runUiTests)
-                GameRepository.Base(
+                GameRepository.Fake(
                     corrects,
                     incorrects,
                     index,
@@ -35,11 +32,12 @@ class GameModule(private val core: Core) : Module<GameViewModel> {
                     incorrects,
                     index,
                     userChoiceIndex,
-                    dataCache,
-                    ParseQuestionAndChoices.Base(core.gson)
+                    core.cacheModule.dao(),
+                    core.cacheModule.clearDatabase(),
+                    core.size
                 )
-            }
-
+            },
+            core.runAsync
         )
     }
 
@@ -54,5 +52,4 @@ class ProvideGameViewModel(
     GameViewModel::class.java
 ) {
     override fun module(): Module<*> = GameModule(core)
-
 }
