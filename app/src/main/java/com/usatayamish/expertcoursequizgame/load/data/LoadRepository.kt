@@ -1,6 +1,9 @@
 package com.usatayamish.expertcoursequizgame.load.data
 
-import com.google.gson.Gson
+import com.usatayamish.expertcoursequizgame.load.data.cache.IncorrectCache
+import com.usatayamish.expertcoursequizgame.load.data.cache.QuestionAndChoicesDao
+import com.usatayamish.expertcoursequizgame.load.data.cache.QuestionCache
+import com.usatayamish.expertcoursequizgame.load.data.cloud.QuizService
 import kotlinx.coroutines.delay
 
 interface LoadRepository {
@@ -9,13 +12,13 @@ interface LoadRepository {
 
     class Base(
         private val service: QuizService,
-        private val parseQuestionAndChoices: ParseQuestionAndChoices,
-        private val dataCache: StringCache,
+        private val dao: QuestionAndChoicesDao,
+        private val size: Int
     ) : LoadRepository {
 
         override suspend fun load(): LoadResult {
             try {
-                val result = service.questionAndChoices().execute()
+                val result = service.questionAndChoices(size).execute()
                 if (result.isSuccessful) {
                     val body = result.body()!!
                     if (body.responseCode == 0) {
@@ -23,8 +26,14 @@ interface LoadRepository {
                         if (list.isEmpty()) {
                             return LoadResult.Error("empty data")
                         } else {
-                            val data = parseQuestionAndChoices.toString(body)
-                            dataCache.save(data)
+                            val questions: List<QuestionCache> = body.dataList.mapIndexed { index, data ->
+                                val incorrects = data.incorrectAnswers.map {
+                                    IncorrectCache(questionId =  index, text = it)
+                                }
+                                dao.insertIncorrects(incorrects)
+                                QuestionCache(index, data.question, data.correctAnswer)
+                            }
+                            dao.insertQuestions(questions)
                             return (LoadResult.Success)
                         }
                     } else {
@@ -79,22 +88,4 @@ interface LoadRepository {
     }
 }
 
-interface ParseQuestionAndChoices {
 
-    fun toString(data: Any): String
-
-    fun parse(source: String): QuizResponse
-
-    class Base(
-        private val gson: Gson
-    ) : ParseQuestionAndChoices {
-
-        override fun toString(data: Any): String {
-            return gson.toJson(data)
-        }
-
-        override fun parse(source: String): QuizResponse {
-            return gson.fromJson(source, QuizResponse::class.java)
-        }
-    }
-}

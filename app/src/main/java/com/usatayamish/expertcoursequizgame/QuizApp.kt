@@ -1,6 +1,7 @@
 package com.usatayamish.expertcoursequizgame
 
 import android.app.Application
+import com.usatayamish.expertcoursequizgame.core.MyViewModel
 
 
 class QuizApp : Application(), ProvideViewModel {
@@ -13,7 +14,7 @@ class QuizApp : Application(), ProvideViewModel {
             Core(
                 this,
                 object : ClearViewModel {
-                    override fun clear(viewModelClass: Class<out MyViewModel>) {
+                    override fun clear(viewModelClass: Class<out MyViewModel<*>>) {
                         factory.clear(viewModelClass)
                     }
                 }
@@ -23,7 +24,7 @@ class QuizApp : Application(), ProvideViewModel {
         factory = ManageViewModels.Factory(make)
     }
 
-    override fun <T : MyViewModel> makeViewModel(clasz: Class<T>): T {
+    override fun <S: Any, T : MyViewModel<S>> makeViewModel(clasz: Class<T>): T {
         return factory.makeViewModel(clasz)
     }
 

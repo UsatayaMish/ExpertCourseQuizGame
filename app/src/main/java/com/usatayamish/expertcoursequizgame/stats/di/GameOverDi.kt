@@ -1,9 +1,9 @@
 package com.usatayamish.expertcoursequizgame.stats.di
 
 import com.usatayamish.expertcoursequizgame.Core
-import com.usatayamish.expertcoursequizgame.IntCache
 import com.usatayamish.expertcoursequizgame.Module
 import com.usatayamish.expertcoursequizgame.ProvideViewModel
+import com.usatayamish.expertcoursequizgame.core.IntCache
 import com.usatayamish.expertcoursequizgame.di.AbstractProvideViewModel
 import com.usatayamish.expertcoursequizgame.stats.GameOverViewModel
 import com.usatayamish.expertcoursequizgame.stats.StatsRepository

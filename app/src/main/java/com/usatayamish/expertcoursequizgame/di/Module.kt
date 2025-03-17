@@ -1,6 +1,8 @@
 package com.usatayamish.expertcoursequizgame
 
-interface Module<T : MyViewModel> {
+import com.usatayamish.expertcoursequizgame.core.MyViewModel
+
+interface Module<T : MyViewModel<*>> {
 
     fun viewModel(): T
 }
