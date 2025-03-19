@@ -2,15 +2,14 @@ package com.usatayamish.expertcoursequizgame
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.usatayamish.expertcoursequizgame.core.MainActivity
 import com.usatayamish.expertcoursequizgame.game.GamePage
 import com.usatayamish.expertcoursequizgame.load.LoadPage
 import com.usatayamish.expertcoursequizgame.stats.GameOverPage
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
@@ -260,7 +259,6 @@ class ScenarioTest {
     /**
      * QGTC-04
      */
-
     @Test
     fun caseNumber4() {
         val loadPage = LoadPage()

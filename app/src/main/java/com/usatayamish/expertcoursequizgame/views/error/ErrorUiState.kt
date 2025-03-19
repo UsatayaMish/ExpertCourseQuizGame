@@ -16,11 +16,19 @@ interface ErrorUiState: Serializable {
 
     object Hide: Abstract(View.GONE)
 
-    data class Show(private val resId: Int): Abstract(View.VISIBLE) {
+    data class ShowRes(private val resId: Int): Abstract(View.VISIBLE) {
 
         override fun update(updateError: UpdateError) {
             super.update(updateError)
             updateError.updateText(resId)
+        }
+    }
+
+    data class Show(private val message: String): Abstract(View.VISIBLE) {
+
+        override fun update(updateError: UpdateError) {
+            super.update(updateError)
+            updateError.updateText(message)
         }
     }
 }

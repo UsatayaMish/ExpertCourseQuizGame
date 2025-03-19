@@ -2,9 +2,12 @@ package com.usatayamish.expertcoursequizgame.load.presentation
 
 
 import com.usatayamish.expertcoursequizgame.ClearViewModel
+import com.usatayamish.expertcoursequizgame.R
 import com.usatayamish.expertcoursequizgame.core.MyViewModel
 import com.usatayamish.expertcoursequizgame.core.RunAsync
+import com.usatayamish.expertcoursequizgame.load.data.BackendException
 import com.usatayamish.expertcoursequizgame.load.data.LoadRepository
+import com.usatayamish.expertcoursequizgame.load.data.NoInternetConnectionException
 
 class LoadViewModel(
     private val repository: LoadRepository,
@@ -19,12 +22,17 @@ class LoadViewModel(
             runAsync.handleAsync(
                 viewModelScope,
                 {
-                    val result = repository.load()
-                    if (result.isSuccessful()) {
+                    try {
+                        repository.load()
                         clearViewModel.clear(LoadViewModel::class.java)
                         LoadUiState.Success
-                    } else
-                        LoadUiState.Error(result.message())
+                    } catch (e: Exception) {
+                        when (e) {
+                            is NoInternetConnectionException -> LoadUiState.ErrorRes()
+                            is BackendException -> LoadUiState.Error(e.message?:"")
+                            else -> LoadUiState.ErrorRes(R.string.sevice_unavailable)
+                        }
+                    }
                 }) {
                 observable.postUiState(it)
             }

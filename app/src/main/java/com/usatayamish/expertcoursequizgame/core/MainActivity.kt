@@ -1,11 +1,10 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.core
 
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.usatayamish.expertcoursequizgame.core.MyViewModel
-import com.usatayamish.expertcoursequizgame.core.Screen
+import com.usatayamish.expertcoursequizgame.ProvideViewModel
+import com.usatayamish.expertcoursequizgame.R
 import com.usatayamish.expertcoursequizgame.game.GameScreen
 import com.usatayamish.expertcoursequizgame.game.NavigateToGame
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadScreen
@@ -19,12 +18,10 @@ class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        if(savedInstanceState == null) { //todo MainViewModel later
-            navigateToLoad()
-        }
+        val viewModel = makeViewModel(MainViewModel::class.java)
+        val screen = viewModel.firstScreen(savedInstanceState == null)
+        navigate(screen)
 
     }
 

@@ -15,3 +15,4 @@ class Core(context: Context, val clearViewModel: ClearViewModel) {
     val cacheModule: CacheModule = CacheModule.Base(context)
     val runAsync: RunAsync = RunAsync.Base()
 }
+

@@ -68,7 +68,6 @@ interface GameRepository {
 
         override suspend fun clear() {
             userChoiceIndex.save(-1)
-            index.save(0)
             clearDatabase.clear()
         }
     }

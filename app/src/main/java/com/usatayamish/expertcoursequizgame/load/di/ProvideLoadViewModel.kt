@@ -3,8 +3,10 @@ package com.usatayamish.expertcoursequizgame.load.di
 import com.usatayamish.expertcoursequizgame.Core
 import com.usatayamish.expertcoursequizgame.Module
 import com.usatayamish.expertcoursequizgame.ProvideViewModel
+import com.usatayamish.expertcoursequizgame.core.IntCache
 import com.usatayamish.expertcoursequizgame.di.AbstractProvideViewModel
 import com.usatayamish.expertcoursequizgame.load.data.LoadRepository
+import com.usatayamish.expertcoursequizgame.load.data.cloud.CloudDataSource
 import com.usatayamish.expertcoursequizgame.load.data.cloud.QuizService
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadUiObservable
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadViewModel
@@ -51,9 +53,13 @@ class LoadModule(
                 LoadRepository.FakeRepository()
             else
                 LoadRepository.Base(
-                    service,
+                    IntCache.Base(core.sharedPreferences, "indexKey", core.size),
+                    CloudDataSource.Base(
+                        service,
+                        core.size
+                    ),
                     core.cacheModule.dao(),
-                    core.size
+
                 ),
             LoadUiObservable.Base(),
             core.runAsync,

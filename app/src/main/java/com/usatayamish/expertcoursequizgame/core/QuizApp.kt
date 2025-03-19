@@ -1,7 +1,10 @@
-package com.usatayamish.expertcoursequizgame
+package com.usatayamish.expertcoursequizgame.core
 
 import android.app.Application
-import com.usatayamish.expertcoursequizgame.core.MyViewModel
+import com.usatayamish.expertcoursequizgame.ClearViewModel
+import com.usatayamish.expertcoursequizgame.Core
+import com.usatayamish.expertcoursequizgame.ManageViewModels
+import com.usatayamish.expertcoursequizgame.ProvideViewModel
 
 
 class QuizApp : Application(), ProvideViewModel {
