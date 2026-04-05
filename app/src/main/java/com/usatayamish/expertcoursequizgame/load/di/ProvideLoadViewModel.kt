@@ -10,6 +10,7 @@ import com.usatayamish.expertcoursequizgame.load.data.cloud.CloudDataSource
 import com.usatayamish.expertcoursequizgame.load.data.cloud.QuizService
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadUiObservable
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadViewModel
+import com.usatayamish.expertcoursequizgame.load.presentation.Now
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -49,6 +50,7 @@ class LoadModule(
             .build()
         val service = retrofit.create(QuizService::class.java)
         return LoadViewModel(
+            Now.Base(),
             if (core.runUiTests)
                 LoadRepository.FakeRepository()
             else

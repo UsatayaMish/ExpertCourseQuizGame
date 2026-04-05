@@ -11,7 +11,6 @@ import com.usatayamish.expertcoursequizgame.load.presentation.LoadScreen
 import com.usatayamish.expertcoursequizgame.load.presentation.NavigateToLoad
 import com.usatayamish.expertcoursequizgame.stats.GameOverScreen
 import com.usatayamish.expertcoursequizgame.stats.NavigateToGameOver
-
 class MainActivity : AppCompatActivity(), Navigate, ProvideViewModel {
 
 

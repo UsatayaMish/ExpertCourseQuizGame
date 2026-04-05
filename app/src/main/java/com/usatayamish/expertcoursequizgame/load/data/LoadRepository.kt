@@ -1,5 +1,6 @@
 package com.usatayamish.expertcoursequizgame.load.data
 
+import android.util.Log
 import com.usatayamish.expertcoursequizgame.core.IntCache
 import com.usatayamish.expertcoursequizgame.load.data.cache.IncorrectCache
 import com.usatayamish.expertcoursequizgame.load.data.cache.QuestionAndChoicesDao
@@ -10,7 +11,7 @@ import okio.IOException
 
 interface LoadRepository {
 
-    suspend fun load()
+    suspend fun load(timeStamp: Long)
 
     class Base(
         private val index: IntCache,
@@ -18,9 +19,11 @@ interface LoadRepository {
         private val cacheDataSource: QuestionAndChoicesDao,
     ) : LoadRepository {
 
-        override suspend fun load() {
+        override suspend fun load(timeStamp: Long) {
             try {
+                Log.d("usatayamish", "timestamp is $timeStamp")
                 val dataList = cloudDataSource.load()
+                delay(10_000)
                 val incorrects = mutableListOf<IncorrectCache>()
                 val questions: List<QuestionCache> =
                     dataList.mapIndexed { index, data ->
@@ -50,7 +53,7 @@ interface LoadRepository {
 
         private var count = 0
 
-        override suspend fun load() {
+        override suspend fun load(timeStamp: Long) {
             delay(3000)
             if (count == 0) {
                 count++

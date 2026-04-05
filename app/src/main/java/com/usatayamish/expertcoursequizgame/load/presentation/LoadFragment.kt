@@ -1,5 +1,6 @@
 package com.usatayamish.expertcoursequizgame.load.presentation
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.usatayamish.expertcoursequizgame.game.NavigateToGame
 class LoadFragment : AbstractFragment<LoadUiState, LoadViewModel>() {
 
     private var _binding: FragmentLoadBinding? = null
+    private var cachedUiState: LoadUiState = LoadUiState.Empty
 
     private val binding
         get() = _binding!!
@@ -26,6 +28,7 @@ class LoadFragment : AbstractFragment<LoadUiState, LoadViewModel>() {
     }
 
     override val update: (LoadUiState) -> Unit = { uiState ->
+        cachedUiState = uiState
         uiState.show(
             binding.errorTextView,
             binding.retryButton,
@@ -44,12 +47,28 @@ class LoadFragment : AbstractFragment<LoadUiState, LoadViewModel>() {
             viewModel.load()
         }
 
-        viewModel.load(isFirstRun = savedInstanceState == null)
+        savedInstanceState?.let {
+            cachedUiState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getSerializable(KEY, LoadUiState::class.java) as LoadUiState
+            } else  {
+                it.getSerializable(KEY) as LoadUiState
+            }
+        }
+        cachedUiState.load(viewModel)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(KEY, cachedUiState)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val KEY = "uiState"
     }
 
 }

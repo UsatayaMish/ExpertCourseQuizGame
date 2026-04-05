@@ -25,6 +25,7 @@ interface CloudDataSource {
                     throw IllegalArgumentException(handleResponseCode(body.responseCode))
                 }
             } else {
+
                 throw IllegalStateException(result.errorBody().toString())
             }
         }
