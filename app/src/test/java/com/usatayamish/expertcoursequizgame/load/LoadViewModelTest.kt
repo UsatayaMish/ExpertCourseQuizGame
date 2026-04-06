@@ -3,10 +3,11 @@ package com.usatayamish.expertcoursequizgame.load
 import com.usatayamish.expertcoursequizgame.core.RunAsync
 import com.usatayamish.expertcoursequizgame.game.FakeClearViewModel
 import com.usatayamish.expertcoursequizgame.load.data.LoadRepository
-import com.usatayamish.expertcoursequizgame.load.data.LoadResult
+import com.usatayamish.expertcoursequizgame.load.data.NoInternetConnectionException
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadUiObservable
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadUiState
 import com.usatayamish.expertcoursequizgame.load.presentation.LoadViewModel
+import com.usatayamish.expertcoursequizgame.load.presentation.Now
 import com.usatayamish.expertcoursequizgame.load.presentation.UiObservable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -22,6 +23,7 @@ class LoadViewModelTest {
     private lateinit var viewModel: LoadViewModel
     private lateinit var fragment: FakeFragment
     private lateinit var clearViewModel: FakeClearViewModel
+    private lateinit var now: FakeNow
 
     @Before
     fun setup() {
@@ -29,83 +31,157 @@ class LoadViewModelTest {
         observable = FakeLoadUiObservable.Base()
         runAsync = FakeRunAsync()
         clearViewModel = FakeClearViewModel()
+        now = FakeNow()
         viewModel = LoadViewModel(
             repository = repository,
             observable = observable,
             runAsync = runAsync,
-            clearViewModel = clearViewModel
+            clearViewModel = clearViewModel,
+            now = now
         )
         fragment = FakeFragment()
     }
 
     @Test
-    fun same_fragment() {
-        repository.expectResult(LoadResult.Success)
-
-        viewModel.load(isFirstRun = true)//onViewCreated first time
-        assertEquals(LoadUiState.Progress, observable.postUiStateCalledList.first())
-
-        assertEquals(1, repository.loadCalledCount)//ping repo to get data
+    fun processDeath() {
+        var state: LoadUiState = LoadUiState.Empty
+        state.load(viewModel)
+        assertEquals(LoadUiState.Progress(1), observable.postUiStateCalledList.first())
+        assertEquals(1, observable.postUiStateCalledList.size)
+        assertEquals(1, repository.loadCalledCount)
+        assertEquals(1, repository.timeStamp)
 
         viewModel.startUpdates(observer = fragment)//onResume
         assertEquals(1, observable.registerCalledCount)
 
-        assertEquals(
-            LoadUiState.Progress,
-            fragment.statesList.first()
-        )//give cached progress ui state to fragment
+        state = fragment.statesList.last()
+
         assertEquals(1, fragment.statesList.size)
+        assertEquals(LoadUiState.Progress(1), state)
+
+        viewModel.stopUpdates()//onPause
+        assertEquals(1, observable.unregisterCalledCount)
+
+        //process death here
+        viewModel = LoadViewModel(
+            repository = repository,
+            observable = observable,
+            runAsync = runAsync,
+            clearViewModel = clearViewModel,
+            now = FakeNow()
+        )
+
+        state.load(viewModel)
+
+        assertEquals(2, repository.loadCalledCount)
+        assertEquals(1, repository.timeStamp)
 
         runAsync.returnResult()
-        assertEquals(LoadUiState.Success, observable.postUiStateCalledList[1])
-        assertEquals(2, observable.postUiStateCalledList.size)
-        assertEquals(LoadUiState.Success, fragment.statesList[1])
-        assertEquals(2, fragment.statesList.size)
-        clearViewModel.assertClearCalled(LoadViewModel::class.java)
+
+        viewModel.startUpdates(fragment)
+        assertEquals(2, observable.registerCalledCount)
+
+        state = fragment.statesList.last()
+
+        assertEquals(LoadUiState.Success, state)
     }
 
     @Test
-    fun recreateActivity() {
-        repository.expectResult(LoadResult.Error(message = "no internet"))
-
-        viewModel.load(isFirstRun = true)//onViewCreated first time
-        assertEquals(LoadUiState.Progress, observable.postUiStateCalledList.first())
+    fun activityRecreated() {
+        var state: LoadUiState = LoadUiState.Empty
+        state.load(viewModel)
+        assertEquals(LoadUiState.Progress(1), observable.postUiStateCalledList.first())
         assertEquals(1, observable.postUiStateCalledList.size)
-        assertEquals(1, repository.loadCalledCount)//ping observable with progress and then repo
+        assertEquals(1, repository.loadCalledCount)
+        assertEquals(1, repository.timeStamp)
 
         viewModel.startUpdates(observer = fragment)//onResume
         assertEquals(1, observable.registerCalledCount)
 
-        assertEquals(LoadUiState.Progress, fragment.statesList.first())
-        assertEquals(1, fragment.statesList.size)
+        state = fragment.statesList.last()
 
-        viewModel.stopUpdates()//onPause and activity death
+        assertEquals(1, fragment.statesList.size)
+        assertEquals(LoadUiState.Progress(1), state)
+
+        viewModel.stopUpdates()//onPause
         assertEquals(1, observable.unregisterCalledCount)
 
-        runAsync.returnResult()
-        assertEquals(1, fragment.statesList.size)
-        assertEquals(
-            LoadUiState.Error(message = "no internet"),
-            observable.postUiStateCalledList[1]
-        )
-        assertEquals(2, observable.postUiStateCalledList.size)
+        //activity recreated
 
-        val newInstanceOfFragment = FakeFragment()//new fragment instance after activity recreate
+        state.load(viewModel)
 
-        viewModel.load(isFirstRun = false)//onViewCreated after activity recreate
         assertEquals(1, repository.loadCalledCount)
-        assertEquals(2, observable.postUiStateCalledList.size)
-
-        viewModel.startUpdates(observer = newInstanceOfFragment)//onResume after recreate
-        assertEquals(2, observable.registerCalledCount)
-
-        assertEquals(
-            LoadUiState.Error(message = "no internet"),
-            newInstanceOfFragment.statesList.first()
-        )
-        assertEquals(1, newInstanceOfFragment.statesList.size)
     }
 }
+
+//     @Test
+//     fun same_fragment() {
+//         repository.expectResult(LoadResult.Success)
+//
+//         viewModel.load(isFirstRun = true)//onViewCreated first time
+//         assertEquals(LoadUiState.Progress, observable.postUiStateCalledList.first())
+//
+//         assertEquals(1, repository.loadCalledCount)//ping repo to get data
+//
+//         viewModel.startUpdates(observer = fragment)//onResume
+//         assertEquals(1, observable.registerCalledCount)
+//
+//         assertEquals(
+//             LoadUiState.Progress,
+//             fragment.statesList.first()
+//         )//give cached progress ui state to fragment
+//         assertEquals(1, fragment.statesList.size)
+//
+//         runAsync.returnResult()
+//         assertEquals(LoadUiState.Success, observable.postUiStateCalledList[1])
+//         assertEquals(2, observable.postUiStateCalledList.size)
+//         assertEquals(LoadUiState.Success, fragment.statesList[1])
+//         assertEquals(2, fragment.statesList.size)
+//         clearViewModel.assertClearCalled(LoadViewModel::class.java)
+//     }
+//
+//     @Test
+//     fun recreateActivity() {
+//         repository.expectResult(LoadResult.Error(message = "no internet"))
+//
+//         viewModel.load(isFirstRun = true)//onViewCreated first time
+//         assertEquals(LoadUiState.Progress, observable.postUiStateCalledList.first())
+//         assertEquals(1, observable.postUiStateCalledList.size)
+//         assertEquals(1, repository.loadCalledCount)//ping observable with progress and then repo
+//
+//         viewModel.startUpdates(observer = fragment)//onResume
+//         assertEquals(1, observable.registerCalledCount)
+//
+//         assertEquals(LoadUiState.Progress, fragment.statesList.first())
+//         assertEquals(1, fragment.statesList.size)
+//
+//         viewModel.stopUpdates()//onPause and activity death
+//         assertEquals(1, observable.unregisterCalledCount)
+//
+//         runAsync.returnResult()
+//         assertEquals(1, fragment.statesList.size)
+//         assertEquals(
+//             LoadUiState.Error(message = "no internet"),
+//             observable.postUiStateCalledList[1]
+//         )
+//         assertEquals(2, observable.postUiStateCalledList.size)
+//
+//         val newInstanceOfFragment = FakeFragment()//new fragment instance after activity recreate
+//
+//         viewModel.load(isFirstRun = false)//onViewCreated after activity recreate
+//         assertEquals(1, repository.loadCalledCount)
+//         assertEquals(2, observable.postUiStateCalledList.size)
+//
+//         viewModel.startUpdates(observer = newInstanceOfFragment)//onResume after recreate
+//         assertEquals(2, observable.registerCalledCount)
+//
+//         assertEquals(
+//             LoadUiState.Error(message = "no internet"),
+//             newInstanceOfFragment.statesList.first()
+//         )
+//         assertEquals(1, newInstanceOfFragment.statesList.size)
+//     }
+// }
 
 private class FakeFragment : (LoadUiState) -> Unit {
 
@@ -118,17 +194,18 @@ private class FakeFragment : (LoadUiState) -> Unit {
 
 private class FakeLoadRepository : LoadRepository {
 
-    private var loadResult: LoadResult? = null
+    var loadCalledCount = 0
+    var timeStamp = -1L
+    private var success = true
 
-    fun expectResult(loadResult: LoadResult) {
-        this.loadResult = loadResult
+    fun expectFailure() {
+        success = false
     }
 
-    var loadCalledCount = 0
-
-    override suspend fun load(): LoadResult {
+    override suspend fun load(timeStamp: Long) {
+        this.timeStamp = timeStamp
         loadCalledCount++
-        return loadResult!!
+        if(!success) throw NoInternetConnectionException()
     }
 }
 
@@ -201,4 +278,15 @@ class FakeRunAsync : RunAsync {
     fun returnResult() {
         ui.invoke(result!!)
     }
+}
+
+private class FakeNow(): Now {
+
+    private var time: Long = 0L
+
+    override fun timeInMillis(): Long {
+        return ++time
+    }
+
+
 }
